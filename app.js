@@ -73,7 +73,6 @@ function playSong(url, songId, btnElement) {
         currentAudio = document.getElementById('globalAudioPlayer');
     }
 
-    // Aynı şarkıya basılmışsa durdur
     if (currentSongId === songId && !currentAudio.paused) {
         currentAudio.pause();
         btnElement.innerHTML = '▶ Oynat';
@@ -82,7 +81,6 @@ function playSong(url, songId, btnElement) {
         return;
     }
 
-    // Önceki butonu sıfırla
     if (currentPlayBtn) {
         currentPlayBtn.innerHTML = '▶ Oynat';
     }
@@ -107,7 +105,6 @@ function playSong(url, songId, btnElement) {
     };
 }
 
-// Admin İşlemleri
 function initAdmin() {
     const loginForm = document.getElementById('loginForm');
     const loginOverlay = document.getElementById('loginOverlay');
