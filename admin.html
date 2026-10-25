@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetim Paneli - Müzik Çalar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Şifre Ekranı -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
+            <h2>Admin Girişi</h2>
+            <form id="loginForm">
+                <input type="password" id="adminPassword" placeholder="Şifreyi giriniz (hamit2015)" required>
+                <button type="submit" class="btn">Giriş Yap</button>
+            </form>
+            <p id="loginError" style="color: var(--danger-color); margin-top: 10px; display: none;">Hatalı şifre!</p>
+        </div>
+    </div>
+
+    <!-- Admin Paneli İçeriği -->
+    <div id="adminPanel" class="admin-panel">
+        <header>
+            <h1>⚙️ Yönetim Paneli</h1>
+            <div class="nav-links">
+                <a href="index.html">Ana Sayfa</a>
+                <a href="#" id="logoutBtn">Çıkış Yap</a>
+            </div>
+        </header>
+
+        <div class="container">
+            <!-- Harici Linkler Bölümü -->
+            <div class="admin-section">
+                <h3>Hızlı Kaynak Bul</h3>
+                <div class="external-links">
+                    <a href="https://www.youtube.com" target="_blank" class="ext-btn btn-youtube">Go YouTube</a>
+                    <a href="https://www.google.com" target="_blank" class="ext-btn btn-google">Go Google</a>
+                </div>
+            </div>
+
+            <!-- Şarkı Ekleme Formu -->
+            <div class="admin-section">
+                <h3>Yeni Şarkı Ekle</h3>
+                <form id="addSongForm">
+                    <div class="form-group">
+                        <label for="songTitle">Şarkı Adı</label>
+                        <input type="text" id="songTitle" required placeholder="Örn: Şarkı İsmi">
+                    </div>
+                    <div class="form-group">
+                        <label for="songArtist">Sanatçı</label>
+                        <input type="text" id="songArtist" required placeholder="Örn: Sanatçı Adı">
+                    </div>
+                    <div class="form-group">
+                        <label for="songUrl">Şarkı Kaynak Linki (MP3 URL veya Dosya)</label>
+                        <input type="text" id="songUrl" required placeholder="https://... veya dosya linki">
+                    </div>
+                    <div class="form-group">
+                        <label for="songCover">Kapak Görseli Linki</label>
+                        <input type="text" id="songCover" required placeholder="https://... görsel URL">
+                    </div>
+                    
+                    <!-- Yayınlama / Onay Mekanizması Toggle Switch -->
+                    <div class="toggle-container">
+                        <label class="switch">
+                            <input type="checkbox" id="autoPublishToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span id="toggleLabel" style="font-weight: bold; color: var(--accent-color);">Otomatik Yayınla (Onaylı)</span>
+                    </div>
+
+                    <button type="submit" class="btn">Şarkıyı Ekle</button>
+                </form>
+            </div>
+
+            <!-- Şarkı Listesi ve Yönetimi -->
+            <div class="admin-section">
+                <h3>Sistemdeki Şarkılar</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kapak</th>
+                            <th>Şarkı / Sanatçı</th>
+                            <th>Onay Durumu</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminSongTableBody">
+                        <!-- Dinamik dolacak -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initAdmin();
+        });
+    </script>
+</body>
+</html>
