@@ -1,9 +1,8 @@
-﻿// Ortak Veri Yönetimi ve Müzik Çalar Mantığı
-
-let currentAudio = null;
+﻿let currentAudio = document.getElementById('globalAudioPlayer');
 let currentPlayBtn = null;
+let currentSongId = null;
+let allSongs = [];
 
-// Verileri localStorage ve songs.json üzerinden yönetme
 async function getSongs() {
     let storedSongs = localStorage.getItem('music_songs_data');
     if (storedSongs) {
@@ -15,7 +14,7 @@ async function getSongs() {
             localStorage.setItem('music_songs_data', JSON.stringify(data));
             return data;
         } catch (error) {
-            console.error('songs.json yüklenemedi:', error);
+            console.error('songs.json okunamadı:', error);
             return [];
         }
     }
@@ -25,18 +24,21 @@ async function saveSongs(songs) {
     localStorage.setItem('music_songs_data', JSON.stringify(songs));
 }
 
-// --- Index.html Mantığı ---
-async function loadIndexSongs() {
+async function loadIndexSongs(categoryFilter = 'Tümü') {
     const songGrid = document.getElementById('songGrid');
     if (!songGrid) return;
 
-    const songs = await getSongs();
-    const approvedSongs = songs.filter(s => s.approved);
+    allSongs = await getSongs();
+    let approvedSongs = allSongs.filter(s => s.approved);
+
+    if (categoryFilter !== 'Tümü') {
+        approvedSongs = approvedSongs.filter(s => s.category === categoryFilter);
+    }
 
     songGrid.innerHTML = '';
 
     if (approvedSongs.length === 0) {
-        songGrid.innerHTML = '<p style="color: var(--text-muted);">Henüz onaylanmış şarkı bulunmuyor.</p>';
+        songGrid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center;">Bu kategoride yayınlanmış şarkı bulunamadı.</p>';
         return;
     }
 
@@ -44,12 +46,15 @@ async function loadIndexSongs() {
         const card = document.createElement('div');
         card.className = 'song-card';
         card.innerHTML = `
-            <img src="${song.cover}" alt="${song.title}" class="song-cover" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300'">
+            <div class="song-cover-container">
+                <img src="${song.cover}" alt="${song.title}" class="song-cover" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300'">
+                <span class="category-tag">${song.category || 'Genel'}</span>
+            </div>
             <div class="song-info">
                 <h3>${song.title}</h3>
                 <p>${song.artist}</p>
             </div>
-            <button class="play-btn" onclick="togglePlay('${song.url}', this)">
+            <button class="play-btn" onclick="playSong('${song.url}', ${song.id}, this)">
                 ▶ Oynat
             </button>
         `;
@@ -57,44 +62,52 @@ async function loadIndexSongs() {
     });
 }
 
-// Aynı Anda Tek Şarkı Kuralı (Kritik)
-function togglePlay(url, btnElement) {
-    if (currentAudio) {
-        currentAudio.pause();
-        currentAudio.currentTime = 0;
-        if (currentPlayBtn) {
-            currentPlayBtn.innerHTML = '▶ Oynat';
-            currentPlayBtn.style.backgroundColor = 'var(--accent-color)';
-        }
-        if (currentAudio.src === url || currentAudio.src === window.location.origin + url) {
-            currentAudio = null;
-            currentPlayBtn = null;
-            return;
-        }
+function filterCategory(category, element) {
+    document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+    loadIndexSongs(category);
+}
+
+function playSong(url, songId, btnElement) {
+    if (!currentAudio) {
+        currentAudio = document.getElementById('globalAudioPlayer');
     }
 
-    currentAudio = new Audio(url);
+    // Aynı şarkıya basılmışsa durdur
+    if (currentSongId === songId && !currentAudio.paused) {
+        currentAudio.pause();
+        btnElement.innerHTML = '▶ Oynat';
+        currentPlayBtn = null;
+        currentSongId = null;
+        return;
+    }
+
+    // Önceki butonu sıfırla
+    if (currentPlayBtn) {
+        currentPlayBtn.innerHTML = '▶ Oynat';
+    }
+
+    currentAudio.src = url;
+    currentSongId = songId;
     currentPlayBtn = btnElement;
 
     currentAudio.play().then(() => {
         btnElement.innerHTML = '⏸ Durdur';
-        btnElement.style.backgroundColor = '#e91429';
     }).catch(err => {
-        alert('Şarkı çalınamadı! Geçerli bir ses dosyası veya doğrudan URL olduğundan emin olun.');
-        console.error(err);
-        currentAudio = null;
+        alert('Şarkı ses dosyası oynatılamadı! Lütfen linkin doğrudan çalışan bir .mp3 bağlantısı olduğunu kontrol edin.');
+        btnElement.innerHTML = '▶ Oynat';
+        currentSongId = null;
         currentPlayBtn = null;
     });
 
     currentAudio.onended = () => {
         btnElement.innerHTML = '▶ Oynat';
-        btnElement.style.backgroundColor = 'var(--accent-color)';
-        currentAudio = null;
+        currentSongId = null;
         currentPlayBtn = null;
     };
 }
 
-// --- Admin.html Mantığı ---
+// Admin İşlemleri
 function initAdmin() {
     const loginForm = document.getElementById('loginForm');
     const loginOverlay = document.getElementById('loginOverlay');
@@ -132,6 +145,7 @@ function initAdmin() {
         e.preventDefault();
         const title = document.getElementById('songTitle').value;
         const artist = document.getElementById('songArtist').value;
+        const category = document.getElementById('songCategory').value;
         const url = document.getElementById('songUrl').value;
         const cover = document.getElementById('songCover').value;
         const isApproved = document.getElementById('autoPublishToggle').checked;
@@ -141,6 +155,7 @@ function initAdmin() {
             id: Date.now(),
             title,
             artist,
+            category,
             url,
             cover,
             approved: isApproved
@@ -151,7 +166,7 @@ function initAdmin() {
 
         addSongForm.reset();
         loadAdminSongs();
-        alert(isApproved ? 'Şarkı başarıyla eklendi ve yayına alındı!' : 'Şarkı eklendi (Onay bekliyor).');
+        alert('İçerik başarıyla kaydedildi!');
     });
 }
 
@@ -163,23 +178,24 @@ async function loadAdminSongs() {
     tableBody.innerHTML = '';
 
     if (songs.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Sistemde kayıtlı şarkı yok.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Kayıt bulunamadı.</td></tr>';
         return;
     }
 
     songs.forEach(song => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td><img src="${song.cover}" width="40" height="40" style="object-fit:cover; border-radius:4px;" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300'"></td>
-            <td><strong>${song.title}</strong><br><span style="color:var(--text-muted); font-size:0.85rem;">${song.artist}</span></td>
+            <td><img src="${song.cover}" width="40" height="40" style="object-fit:cover; border-radius:6px;" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300'"></td>
+            <td><strong>${song.title}</strong><br><span style="color:var(--text-muted); font-size:0.8rem;">${song.artist}</span></td>
+            <td><span style="background:rgba(255,255,255,0.1); padding:4px 8px; border-radius:10px; font-size:0.8rem;">${song.category || 'Genel'}</span></td>
             <td>
-                <span style="padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; background: ${song.approved ? 'rgba(29, 185, 84, 0.2); color: #1db954;' : 'rgba(233, 20, 41, 0.2); color: #e91429;'}">
-                    ${song.approved ? 'Onaylı / Yayında' : 'Onay Bekliyor'}
+                <span style="padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; background: ${song.approved ? 'rgba(102, 252, 241, 0.2); color: #66fcf1;' : 'rgba(255, 77, 77, 0.2); color: #ff4d4d;'}">
+                    ${song.approved ? 'Yayında' : 'Onay Bekliyor'}
                 </span>
             </td>
             <td>
-                <button class="btn" style="padding: 6px 12px; font-size: 0.85rem; margin-right: 5px; width: auto;" onclick="toggleApproval(${song.id})">
-                    ${song.approved ? 'Yayından Kaldır' : 'Onayla'}
+                <button class="btn" style="padding: 4px 8px; font-size: 0.8rem; width: auto; margin-right:4px;" onclick="toggleApproval(${song.id})">
+                    ${song.approved ? 'Kaldır' : 'Yayınla'}
                 </button>
                 <button class="btn-danger" onclick="deleteSong(${song.id})">Sil</button>
             </td>
@@ -199,7 +215,7 @@ async function toggleApproval(id) {
 }
 
 async function deleteSong(id) {
-    if (confirm('Bu şarkıyı silmek istediğinize emin misiniz?')) {
+    if (confirm('Silmek istediğinize emin misiniz?')) {
         let songs = await getSongs();
         songs = songs.filter(s => s.id !== id);
         await saveSongs(songs);

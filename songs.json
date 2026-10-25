@@ -1,18 +1,20 @@
 ﻿[
   {
     "id": 1,
-    "title": "Neon Sunset",
-    "artist": "Synthwave Artist",
+    "title": "KAYIP KALP",
+    "artist": "BLOK3",
+    "category": "Rap / HipHop",
     "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     "cover": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300",
     "approved": true
   },
   {
     "id": 2,
-    "title": "Cyber City Beats",
-    "artist": "Future Sound",
+    "title": "Şampiyonluk Marşı",
+    "artist": "Tribün Beste",
+    "category": "Maç Müzikleri",
     "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-    "cover": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300",
+    "cover": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=300",
     "approved": true
   }
 ]

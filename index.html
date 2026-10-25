@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>🎵 Müzik Çalar</h1>
+        <h1>🎧 Müzik & Maç Çaları</h1>
         <div class="nav-links">
             <a href="index.html">Ana Sayfa</a>
             <a href="admin.html">Yönetim Paneli</a>
@@ -16,11 +16,23 @@
     </header>
 
     <div class="container">
-        <h2 class="section-title">Onaylanan Şarkılar</h2>
+        <!-- Kategori Filtre Alanı -->
+        <div class="filter-bar">
+            <button class="filter-chip active" onclick="filterCategory('Tümü', this)">Tümü</button>
+            <button class="filter-chip" onclick="filterCategory('Maç Müzikleri', this)">⚽ Maç Müzikleri</button>
+            <button class="filter-chip" onclick="filterCategory('Rap / HipHop', this)">🎤 Rap / HipHop</button>
+            <button class="filter-chip" onclick="filterCategory('Pop', this)">🎵 Pop</button>
+            <button class="filter-chip" onclick="filterCategory('Genel', this)">📻 Genel</button>
+        </div>
+
+        <h2 style="margin-bottom: 20px;">Onaylanan Şarkılar & Sesler</h2>
         <div id="songGrid" class="song-grid">
-            <!-- Şarkılar dinamik yüklenecek -->
+            <!-- Dinamik yüklenecektir -->
         </div>
     </div>
+
+    <!-- Gizli HTML5 Audio Oynatıcı -->
+    <audio id="globalAudioPlayer"></audio>
 
     <script src="app.js"></script>
     <script>
