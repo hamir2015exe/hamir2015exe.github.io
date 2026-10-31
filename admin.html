@@ -27,39 +27,30 @@
 
     <!-- Admin Kontrol Paneli -->
     <div id="adminPanel" class="admin-panel" style="display: none;">
-        <h2>📥 Yerel Video ve Görsel İndirme Paneli</h2>
-        <p style="color:#aaa; font-size:13px; margin-bottom:15px;">Arama yap, görseliyle ve videosuyla indirerek tamamen reklamsız yayınla!</p>
+        <h2>📥 Gerçek Medya Ekleme Paneli</h2>
+        <p style="color:#aaa; font-size:13px; margin-bottom:15px;">YouTube linkini yapıştır, reklamsız oynatılabilir olarak siteye ekle!</p>
         
         <div class="form-group">
-            <label>Medya / Şarkı Arama Adı:</label>
-            <input type="text" id="searchQuery" placeholder="Örn: kayıp kalp">
-        </div>
-        <div class="form-group">
-            <label>Medya Başlığı:</label>
-            <input type="text" id="songTitle" placeholder="Örn: Kayıp Kalp Şarkısı">
+            <label>Medya Başlığı (Örn: Behiye Saklanıyor):</label>
+            <input type="text" id="songTitle" placeholder="Şarkı veya Video adı...">
         </div>
         <div class="form-group">
             <label>Sanatçı:</label>
-            <input type="text" id="songArtist" placeholder="Örn: Power Şevko">
+            <input type="text" id="songArtist" placeholder="Sanatçı adı...">
         </div>
         <div class="form-group">
-            <label>Medya / Görsel URL Kaynağı:</label>
-            <input type="text" id="mediaUrl" placeholder="Görsel veya video bağlantısını girin...">
-        </div>
-
-        <div class="form-group" style="flex-direction: row; gap: 10px; align-items: center;">
-            <button onclick="downloadWithImage()" style="background-color: #555; width: 100%;">📥 Görseli ve Dosyayı İndir</button>
+            <label>YouTube Video Linki:</label>
+            <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
         </div>
 
         <hr style="border-color: #333; margin: 15px 0;">
 
-        <!-- Yayınlama Anahtarı -->
         <div class="form-group" style="flex-direction: row; align-items: center; justify-content: space-between; background: #121212; padding: 10px; border-radius: 5px;">
-            <label style="cursor: pointer;">🔄 Otomatik Yayınla (Aç/Kapat):</label>
+            <label style="cursor: pointer;">🔄 Otomatik Yayınla:</label>
             <input type="checkbox" id="publishToggle" style="width: 20px; height: 20px; cursor: pointer;" checked>
         </div>
 
-        <button onclick="publishLocalMedia()" style="width: 100%; margin-top: 10px; background-color: #8b0000;">Sitede Yayınla</button>
+        <button onclick="publishRealMedia()" style="width: 100%; margin-top: 10px; background-color: #8b0000;">Medyayı Kaydet ve Oynat</button>
     </div>
 
     <script src="uygulama.js"></script>
