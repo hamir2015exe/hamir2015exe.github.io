@@ -27,30 +27,27 @@
 
     <!-- Admin Kontrol Paneli -->
     <div id="adminPanel" class="admin-panel" style="display: none;">
-        <h2>📥 Gerçek Medya Ekleme Paneli</h2>
-        <p style="color:#aaa; font-size:13px; margin-bottom:15px;">YouTube linkini yapıştır, reklamsız oynatılabilir olarak siteye ekle!</p>
+        <h2>📥 Yerel Medya Dosyası Ekle</h2>
+        <p style="color:#aaa; font-size:13px; margin-bottom:15px;">İndirdiğin ses/video dosyasının bağlantısını veya kapak resmini ekle, tamamen reklamsız yayınla!</p>
         
         <div class="form-group">
-            <label>Medya Başlığı (Örn: Behiye Saklanıyor):</label>
-            <input type="text" id="songTitle" placeholder="Şarkı veya Video adı...">
+            <label>Medya Başlığı:</label>
+            <input type="text" id="songTitle" placeholder="Örn: Kayıp Kalp">
         </div>
         <div class="form-group">
             <label>Sanatçı:</label>
-            <input type="text" id="songArtist" placeholder="Sanatçı adı...">
+            <input type="text" id="songArtist" placeholder="Örn: BLOK3">
         </div>
         <div class="form-group">
-            <label>YouTube Video Linki:</label>
-            <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
+            <label>Medya Dosya Linki (.mp3 veya .mp4):</label>
+            <input type="text" id="mediaUrl" placeholder="Doğrudan dosya bağlantısı...">
+        </div>
+        <div class="form-group">
+            <label>Kapak Resmi Linki:</label>
+            <input type="text" id="coverUrl" placeholder="Görsel linki...">
         </div>
 
-        <hr style="border-color: #333; margin: 15px 0;">
-
-        <div class="form-group" style="flex-direction: row; align-items: center; justify-content: space-between; background: #121212; padding: 10px; border-radius: 5px;">
-            <label style="cursor: pointer;">🔄 Otomatik Yayınla:</label>
-            <input type="checkbox" id="publishToggle" style="width: 20px; height: 20px; cursor: pointer;" checked>
-        </div>
-
-        <button onclick="publishRealMedia()" style="width: 100%; margin-top: 10px; background-color: #8b0000;">Medyayı Kaydet ve Oynat</button>
+        <button onclick="publishLocalFile()" style="width: 100%; margin-top: 10px; background-color: #8b0000;">Sitede Reklamsız Yayınla</button>
     </div>
 
     <script src="uygulama.js"></script>
@@ -62,7 +59,7 @@
                 document.getElementById('adminPanel').style.display = 'block';
                 alert("Giriş başarılı!");
             } else {
-                alert("Hatalı Şifre! Sadece 2015 girilmelidir.");
+                alert("Hatalı Şifre!");
             }
         }
     </script>

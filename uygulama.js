@@ -6,12 +6,6 @@ function saveStoredSongs(songs) {
     localStorage.setItem('published_media_power_sevko', JSON.stringify(songs));
 }
 
-function extractYouTubeId(url) {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-}
-
 function renderPublicSongs(filterText = '') {
     const container = document.getElementById('musicContainer');
     if (!container) return;
@@ -22,35 +16,26 @@ function renderPublicSongs(filterText = '') {
     let filtered = songs.filter(s => s.title.toLowerCase().includes(filterText.toLowerCase()) || s.artist.toLowerCase().includes(filterText.toLowerCase()));
 
     if(filtered.length === 0) {
-        container.innerHTML = '<p style="color:#777;">Henüz eklenen medya yok. /admin.html sayfasına gidip şifre (2015) ile ekleyebilirsin!</p>';
+        container.innerHTML = '<p style="color:#777;">Henüz medya eklenmedi. /admin.html sayfasından ekleyebilirsin!</p>';
         return;
     }
 
-    filtered.forEach((song, index) => {
+    filtered.forEach(song => {
         const card = document.createElement('div');
         card.className = 'music-card';
         card.innerHTML = `
-            <span class="tag">Power Şevko Reklamsız</span>
-            <img src="${song.thumbnail}" alt="Kapak" style="width:100%; height:160px; object-fit:cover; border-radius:6px;">
+            <span class="tag">Power Şevko Yerel & Reklamsız</span>
+            <img src="${song.cover || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300'}" alt="Kapak" style="width:100%; height:160px; object-fit:cover; border-radius:6px;">
             <h3>${song.title}</h3>
             <p style="color:#aaa;">${song.artist}</p>
             
-            <div id="player-${index}" style="margin-top:10px;">
-                <button onclick="playMedia(${index})" style="width:100%; background:#8b0000; padding:8px; border-radius:5px; color:white; font-weight:bold; cursor:pointer;">▶ Dinle / Oynat</button>
-            </div>
+            <audio controls style="width:100%; margin-top:10px;">
+                <source src="${song.url}" type="audio/mp4">
+                Tarayıcınız bu ses formatını desteklemiyor.
+            </audio>
         `;
         container.appendChild(card);
     });
-}
-
-function playMedia(index) {
-    let songs = getStoredSongs();
-    const song = songs[index];
-    const playerContainer = document.getElementById(`player-${index}`);
-    
-    playerContainer.innerHTML = `
-        <iframe width="100%" height="160" src="https://www.youtube-nocookie.com/embed/${song.videoId}?autoplay=1&rel=0&modestbranding=1" title="${song.title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:6px;"></iframe>
-    `;
 }
 
 function filterSongs() {
@@ -58,32 +43,23 @@ function filterSongs() {
     renderPublicSongs(query);
 }
 
-function publishRealMedia() {
+function publishLocalFile() {
     const title = document.getElementById('songTitle').value.trim();
     const artist = document.getElementById('songArtist').value.trim();
-    const url = document.getElementById('youtubeUrl').value.trim();
-    const isPublishActive = document.getElementById('publishToggle').checked;
-    
-    const videoId = extractYouTubeId(url);
+    const url = document.getElementById('mediaUrl').value.trim();
+    const cover = document.getElementById('coverUrl').value.trim();
 
-    if (!title || !artist || !videoId) {
-        alert("Lütfen tüm alanları doldurun ve geçerli bir YouTube linki girin!");
+    if (!title || !artist || !url) {
+        alert("Lütfen başlık, sanatçı ve medya dosya linkini doldurun!");
         return;
     }
-
-    if (!isPublishActive) {
-        alert("Yayınlama anahtarı kapalı!");
-        return;
-    }
-
-    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
     let songs = getStoredSongs();
     const newMedia = {
         title: title,
         artist: artist,
-        videoId: videoId,
-        thumbnail: thumbnailUrl
+        url: url,
+        cover: cover
     };
 
     songs.unshift(newMedia);
@@ -92,7 +68,8 @@ function publishRealMedia() {
 
     document.getElementById('songTitle').value = '';
     document.getElementById('songArtist').value = '';
-    document.getElementById('youtubeUrl').value = '';
+    document.getElementById('mediaUrl').value = '';
+    document.getElementById('coverUrl').value = '';
 
-    alert("✅ Medya başarıyla eklendi, artık oynatılabilir!");
+    alert("✅ Medya başarıyla eklendi ve reklamsız oynatıcılara yüklendi!");
 }
