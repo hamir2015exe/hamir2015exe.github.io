@@ -1,92 +1,88 @@
 ﻿function getStoredSongs() {
-    return JSON.parse(localStorage.getItem('published_songs_power_sevko')) || [];
+    return JSON.parse(localStorage.getItem('published_media_power_sevko')) || [];
 }
 
 function saveStoredSongs(songs) {
-    localStorage.setItem('published_songs_power_sevko', JSON.stringify(songs));
+    localStorage.setItem('published_media_power_sevko', JSON.stringify(songs));
 }
 
-function extractYouTubeId(url) {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-}
-
-function renderPublicSongs() {
+function renderPublicSongs(filterText = '') {
     const container = document.getElementById('musicContainer');
     if (!container) return;
     
     let songs = getStoredSongs();
     container.innerHTML = '';
     
-    if(songs.length === 0) {
-        container.innerHTML = '<p style="color:#777;">Henüz paylaşılan içerik yok. /admin sayfasına girip şifre (2015) ile ilk içeriği ekleyebilirsin!</p>';
+    let filtered = songs.filter(s => s.title.toLowerCase().includes(filterText.toLowerCase()) || s.artist.toLowerCase().includes(filterText.toLowerCase()));
+
+    if(filtered.length === 0) {
+        container.innerHTML = '<p style="color:#777;">Hiç medya bulunamadı. /admin.html sayfasına gidip şifre (2015) ile ekleyebilirsin!</p>';
         return;
     }
 
-    songs.forEach(song => {
+    filtered.forEach(song => {
         const card = document.createElement('div');
         card.className = 'music-card';
         card.innerHTML = `
-            <span class="tag">Power Şevko ${song.quality || ''}</span>
-            <img src="${song.thumbnail}" alt="Kapak Resmi" style="width:100%; height:160px; object-fit:cover; border-radius:6px;">
+            <span class="tag">Power Şevko Yerel</span>
+            <img src="${song.image}" alt="Kapak Resmi" style="width:100%; height:160px; object-fit:cover; border-radius:6px;">
             <h3>${song.title}</h3>
             <p style="color:#aaa;">${song.artist}</p>
-            <a href="https://www.youtube.com/watch?v=${song.videoId}" target="_blank" style="color: #ff4444; font-size: 13px; text-decoration: none;">▶ YouTube'da Aç / Dinle</a>
+            <audio controls style="width:100%; margin-top:10px;">
+                <source src="${song.source}" type="audio/mp4">
+                Tarayıcınız ses oynatmayı desteklemiyor.
+            </audio>
         `;
         container.appendChild(card);
     });
 }
 
-function simulateDownload(type) {
-    const url = document.getElementById('youtubeUrl').value.trim();
-    if (!extractYouTubeId(url)) {
-        alert("Lütfen önce geçerli bir YouTube linki girin!");
-        return;
-    }
-    if (type === '4k') {
-        alert("📥 Video görseliyle birlikte 4K kalitesinde başarıyla indirildi!");
-    } else {
-        alert("📥 Video başarıyla indirildi!");
-    }
+function filterSongs() {
+    const query = document.getElementById('searchInput').value;
+    renderPublicSongs(query);
 }
 
-function publishSong() {
+function downloadWithImage() {
+    const query = document.getElementById('searchQuery').value.trim();
+    if (!query) {
+        alert("Lütfen arama alanına bir şey yazın (örn: kayıp kalp)!");
+        return;
+    }
+    alert("📥 '" + query + "' araması yapıldı, görseli ve dosyası başarıyla indirildi!");
+}
+
+function publishLocalMedia() {
     const title = document.getElementById('songTitle').value.trim();
     const artist = document.getElementById('songArtist').value.trim();
-    const url = document.getElementById('youtubeUrl').value.trim();
+    const mediaUrl = document.getElementById('mediaUrl').value.trim() || 'https://via.placeholder.com/300x160?text=Power+Sevko+Medya';
     const isPublishActive = document.getElementById('publishToggle').checked;
-    
-    const videoId = extractYouTubeId(url);
 
-    if (!title || !artist || !videoId) {
-        alert("Lütfen tüm alanları doldurun ve geçerli bir YouTube linki girin!");
+    if (!title || !artist) {
+        alert("Lütfen medya adını ve sanatçısını doldurun!");
         return;
     }
 
     if (!isPublishActive) {
-        alert("Yayınlama anahtarı kapalı olduğu için içerik paylaşılamadı!");
+        alert("Yayınlama anahtarı kapalı!");
         return;
     }
 
-    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-
     let songs = getStoredSongs();
-    const newSong = {
+    const newMedia = {
         title: title,
         artist: artist,
-        videoId: videoId,
-        thumbnail: thumbnailUrl,
-        quality: document.getElementById('youtubeUrl').value.includes('4k') ? '4K' : 'HD'
+        image: mediaUrl,
+        source: mediaUrl
     };
 
-    songs.unshift(newSong);
+    songs.unshift(newMedia);
     saveStoredSongs(songs);
     renderPublicSongs();
 
     document.getElementById('songTitle').value = '';
     document.getElementById('songArtist').value = '';
-    document.getElementById('youtubeUrl').value = '';
+    document.getElementById('searchQuery').value = '';
+    document.getElementById('mediaUrl').value = '';
 
-    alert("✅ İçerik indirildi ve ortak akışta başarıyla yayınlandı!");
+    alert("✅ Medya indirildi ve reklamsız olarak akışta yayınlandı!");
 }

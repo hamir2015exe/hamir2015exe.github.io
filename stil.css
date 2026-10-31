@@ -7,6 +7,6 @@ button { padding: 10px 15px; border-radius: 5px; border: none; background-color:
 button:hover { background-color: #b22222; }
 .admin-panel { background-color: #1f1f1f; padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 2px solid #8b0000; max-width: 600px; margin: 20px auto; }
 .form-group { margin-bottom: 12px; display: flex; flex-direction: column; gap: 5px; }
-.music-grid { display: display; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.music-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .music-card { background-color: #181818; padding: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px; border: 1px solid #282828; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
 .tag { background-color: #8b0000; font-size: 12px; padding: 3px 8px; border-radius: 4px; width: fit-content; font-weight: bold; }

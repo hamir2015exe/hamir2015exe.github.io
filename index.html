@@ -10,31 +10,16 @@
     <div class="header">
         <h1>🎵 Hamit & Power Şevko Müzik</h1>
         <div class="nav-bar">
-            <input type="text" id="urlInput" placeholder="Adres yazın (örn: /admin)..." onkeydown="if(event.key==='Enter') checkRoute()">
-            <button onclick="checkRoute()">Git</button>
+            <input type="text" id="searchInput" placeholder="İçerik ara (örn: kayıp kalp)..." oninput="filterSongs()">
+            <button onclick="window.location.href='admin.html'">Admin</button>
         </div>
     </div>
-    <h2>🔥 Yayınlanan Müzikler ve Videolar</h2>
+    <h2>🔥 İndirilen ve Yayınlanan Reklamsız Medyalar</h2>
     <br>
     <div class="music-grid" id="musicContainer"></div>
     <script src="uygulama.js"></script>
     <script>
-        window.onload = function() {
-            // Eğer URL'de /admin varsa direkt admin sayfasına yönlendir
-            if (window.location.pathname.endsWith('admin') || window.location.search.includes('admin')) {
-                window.location.href = 'admin.html';
-            }
-            renderPublicSongs();
-        }
-
-        function checkRoute() {
-            const input = document.getElementById('urlInput').value.trim().toLowerCase();
-            if (input === '/admin' || input === 'admin') {
-                window.location.href = 'admin.html';
-            } else {
-                alert("Geçersiz adres! Admin için '/admin' yazmalısınız.");
-            }
-        }
+        window.onload = function() { renderPublicSongs(); }
     </script>
 </body>
 </html>

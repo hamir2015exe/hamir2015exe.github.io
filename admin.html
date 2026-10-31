@@ -27,37 +27,39 @@
 
     <!-- Admin Kontrol Paneli -->
     <div id="adminPanel" class="admin-panel" style="display: none;">
-        <h2>📥 YouTube Video / Şarkı Yükleme ve İndirme</h2>
-        <p style="color:#aaa; font-size:13px; margin-bottom:15px;">YouTube linkini gir, görselini kapak yap ve akışta paylaş!</p>
+        <h2>📥 Yerel Video ve Görsel İndirme Paneli</h2>
+        <p style="color:#aaa; font-size:13px; margin-bottom:15px;">Arama yap, görseliyle ve videosuyla indirerek tamamen reklamsız yayınla!</p>
         
         <div class="form-group">
-            <label>Şarkı / Video Adı:</label>
-            <input type="text" id="songTitle" placeholder="Örn: Efsane Parça">
+            <label>Medya / Şarkı Arama Adı:</label>
+            <input type="text" id="searchQuery" placeholder="Örn: kayıp kalp">
+        </div>
+        <div class="form-group">
+            <label>Medya Başlığı:</label>
+            <input type="text" id="songTitle" placeholder="Örn: Kayıp Kalp Şarkısı">
         </div>
         <div class="form-group">
             <label>Sanatçı:</label>
             <input type="text" id="songArtist" placeholder="Örn: Power Şevko">
         </div>
         <div class="form-group">
-            <label>YouTube Video Linki:</label>
-            <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
+            <label>Medya / Görsel URL Kaynağı:</label>
+            <input type="text" id="mediaUrl" placeholder="Görsel veya video bağlantısını girin...">
         </div>
 
-        <!-- İndirme ve Kalite Seçenekleri -->
         <div class="form-group" style="flex-direction: row; gap: 10px; align-items: center;">
-            <button onclick="simulateDownload('standard')" style="background-color: #333;">Videoyu İndir</button>
-            <button onclick="simulateDownload('4k')" style="background-color: #555;">Görseliyle 4K İndir</button>
+            <button onclick="downloadWithImage()" style="background-color: #555; width: 100%;">📥 Görseli ve Dosyayı İndir</button>
         </div>
 
         <hr style="border-color: #333; margin: 15px 0;">
 
-        <!-- Yayınlama Anahtarı (Aç/Kapat Tuşu) -->
+        <!-- Yayınlama Anahtarı -->
         <div class="form-group" style="flex-direction: row; align-items: center; justify-content: space-between; background: #121212; padding: 10px; border-radius: 5px;">
-            <label style="cursor: pointer;">🔄 İndirilenleri Otomatik Yayınla (Aç/Kapat):</label>
+            <label style="cursor: pointer;">🔄 Otomatik Yayınla (Aç/Kapat):</label>
             <input type="checkbox" id="publishToggle" style="width: 20px; height: 20px; cursor: pointer;" checked>
         </div>
 
-        <button onclick="publishSong()" style="width: 100%; margin-top: 10px; background-color: #8b0000;">Yayınla ve Paylaş</button>
+        <button onclick="publishLocalMedia()" style="width: 100%; margin-top: 10px; background-color: #8b0000;">Sitede Yayınla</button>
     </div>
 
     <script src="uygulama.js"></script>
