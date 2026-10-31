@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetici Paneli - Hamit & Power Şevko</title>
+    <link rel="stylesheet" href="stil.css">
+</head>
+<body>
+    <div class="header">
+        <h1>🛠️ Yönetici & Power Şevko Paneli</h1>
+        <div class="nav-bar">
+            <button onclick="window.location.href='index.html'">Ana Sayfaya Dön</button>
+        </div>
+    </div>
+    <div id="loginScreen" style="background-color: #1f1f1f; padding: 25px; border-radius: 10px; max-width: 400px; margin: 50px auto; border: 2px solid #8b0000;">
+        <h2>🔐 Yönetici Girişi</h2>
+        <br>
+        <div class="form-group">
+            <label>Şifre:</label>
+            <input type="password" id="adminPassword" placeholder="Şifreyi girin...">
+        </div>
+        <button onclick="loginAdmin()">Giriş Yap</button>
+    </div>
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+        <h2>📥 Şarkı Yayınlama Ekranı</h2>
+        <p style="color:#aaa; font-size:13px; margin-bottom:15px;">YouTube linkini yapıştır, kapak resmi otomatik alınsın ve her yerde yayınlansın!</p>
+        <div class="form-group">
+            <label>Şarkı / Video Adı:</label>
+            <input type="text" id="songTitle" placeholder="Örn: Efsane Parça">
+        </div>
+        <div class="form-group">
+            <label>Sanatçı / Kanal:</label>
+            <input type="text" id="songArtist" placeholder="Örn: Power Şevko Mix">
+        </div>
+        <div class="form-group">
+            <label>YouTube Video Linki:</label>
+            <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
+        </div>
+        <button onclick="publishSongFromAdmin()">İndir ve Paylaş (Yayınla)</button>
+    </div>
+    <script src="uygulama.js"></script>
+    <script>
+        function loginAdmin() {
+            const pass = document.getElementById('adminPassword').value;
+            if (pass === "Hamit 2015") {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                alert("Giriş başarılı!");
+            } else {
+                alert("Hatalı Şifre!");
+            }
+        }
+    </script>
+</body>
+</html>

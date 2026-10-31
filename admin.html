@@ -3,110 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yönetim Paneli</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Admin Paneli - Hamit & Power Şevko</title>
+    <link rel="stylesheet" href="stil.css">
 </head>
 <body>
-    <!-- Şifreli Giriş Ekranı -->
-    <div id="loginOverlay" class="login-overlay">
-        <div class="login-box">
-            <h2 style="text-align: center;">🔒 Yönetici Girişi</h2>
-            <form id="loginForm">
-                <input type="password" id="adminPassword" placeholder="Yönetici Şifresi" required>
-                <button type="submit" class="btn">Giriş Yap</button>
-            </form>
-            <p id="loginError" style="color: var(--danger-color); margin-top: 10px; display: none; text-align: center;">Hatalı şifre!</p>
+    <div class="header">
+        <h1>🛠️ Admin & Power Şevko Paneli</h1>
+        <div class="nav-bar">
+            <button onclick="window.location.href='index.html'">Ana Sayfaya Dön</button>
         </div>
     </div>
 
-    <!-- Admin Paneli -->
-    <div id="adminPanel" class="admin-panel">
-        <header>
-            <h1>⚙️ Yönetim Paneli</h1>
-            <div class="nav-links">
-                <a href="index.html">Ana Sayfa</a>
-                <a href="#" id="logoutBtn">Çıkış Yap</a>
-            </div>
-        </header>
-
-        <div class="container">
-            <!-- İndirme / Kaynak Ekranı -->
-            <div class="admin-section">
-                <h3>📥 YouTube / MP3 İndirme İpucu</h3>
-                <div class="download-helper">
-                    💡 <strong>YouTube İndirme ve Ekleme Rehberi:</strong><br>
-                    YouTube'daki videoları MP3 dosyasına dönüştürmek için <a href="https://ytmp3.cc" target="_blank">YTMP3 Araç Sitesi</a> veya benzer bir servis kullanabilirsiniz.<br>
-                    Elde ettiğiniz doğrudan `.mp3` bağlantısını veya dosya adresini aşağıdaki forma ekleyin.
-                </div>
-            </div>
-
-            <!-- Şarkı / Maç Müziği Ekleme Formu -->
-            <div class="admin-section">
-                <h3>Şarkı / Ses Ekle</h3>
-                <form id="addSongForm">
-                    <div class="form-group">
-                        <label for="songTitle">Başlık / Şarkı Adı</label>
-                        <input type="text" id="songTitle" required placeholder="Örn: Maç Giriş Müziği">
-                    </div>
-                    <div class="form-group">
-                        <label for="songArtist">Sanatçı / Takım / Kaynak</label>
-                        <input type="text" id="songArtist" required placeholder="Örn: Galatasaray Marşı">
-                    </div>
-                    <div class="form-group">
-                        <label for="songCategory">Kategori Seçin</label>
-                        <select id="songCategory" required>
-                            <option value="Maç Müzikleri">⚽ Maç Müzikleri</option>
-                            <option value="Rap / HipHop">🎤 Rap / HipHop</option>
-                            <option value="Pop">🎵 Pop</option>
-                            <option value="Genel">📻 Genel</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="songUrl">Şarkı / Ses Bağlantısı (.mp3 URL)</label>
-                        <input type="text" id="songUrl" required placeholder="https://ornek.com/ses.mp3">
-                    </div>
-                    <div class="form-group">
-                        <label for="songCover">Kapak Görseli (URL)</label>
-                        <input type="text" id="songCover" required placeholder="https://ornek.com/gorsel.jpg">
-                    </div>
-                    
-                    <div class="toggle-container">
-                        <label class="switch">
-                            <input type="checkbox" id="autoPublishToggle" checked>
-                            <span class="slider"></span>
-                        </label>
-                        <span id="toggleLabel" style="font-weight: bold; color: var(--accent-color);">Anında Yayınla (Onaylı)</span>
-                    </div>
-
-                    <button type="submit" class="btn">Kaydet ve Ekle</button>
-                </form>
-            </div>
-
-            <!-- Listeleme ve Onay Mekanizması -->
-            <div class="admin-section">
-                <h3>Sistemdeki İçerikler</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Kapak</th>
-                            <th>Başlık & Sanatçı</th>
-                            <th>Kategori</th>
-                            <th>Durum</th>
-                            <th>İşlemler</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminSongTableBody">
-                    </tbody>
-                </table>
-            </div>
+    <!-- Şifre Ekranı -->
+    <div id="loginScreen" class="admin-panel" style="max-width: 400px; margin: 50px auto;">
+        <h2>🔐 Yönetici Girişi</h2>
+        <br>
+        <div class="form-group">
+            <label>Şifre (2015):</label>
+            <input type="password" id="adminPassword" placeholder="Şifreyi girin..." onkeydown="if(event.key==='Enter') loginAdmin()">
         </div>
+        <button onclick="loginAdmin()">Giriş Yap</button>
     </div>
 
-    <script src="app.js"></script>
+    <!-- Admin Kontrol Paneli -->
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+        <h2>📥 YouTube Video / Şarkı Yükleme ve İndirme</h2>
+        <p style="color:#aaa; font-size:13px; margin-bottom:15px;">YouTube linkini gir, görselini kapak yap ve akışta paylaş!</p>
+        
+        <div class="form-group">
+            <label>Şarkı / Video Adı:</label>
+            <input type="text" id="songTitle" placeholder="Örn: Efsane Parça">
+        </div>
+        <div class="form-group">
+            <label>Sanatçı:</label>
+            <input type="text" id="songArtist" placeholder="Örn: Power Şevko">
+        </div>
+        <div class="form-group">
+            <label>YouTube Video Linki:</label>
+            <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
+        </div>
+
+        <!-- İndirme ve Kalite Seçenekleri -->
+        <div class="form-group" style="flex-direction: row; gap: 10px; align-items: center;">
+            <button onclick="simulateDownload('standard')" style="background-color: #333;">Videoyu İndir</button>
+            <button onclick="simulateDownload('4k')" style="background-color: #555;">Görseliyle 4K İndir</button>
+        </div>
+
+        <hr style="border-color: #333; margin: 15px 0;">
+
+        <!-- Yayınlama Anahtarı (Aç/Kapat Tuşu) -->
+        <div class="form-group" style="flex-direction: row; align-items: center; justify-content: space-between; background: #121212; padding: 10px; border-radius: 5px;">
+            <label style="cursor: pointer;">🔄 İndirilenleri Otomatik Yayınla (Aç/Kapat):</label>
+            <input type="checkbox" id="publishToggle" style="width: 20px; height: 20px; cursor: pointer;" checked>
+        </div>
+
+        <button onclick="publishSong()" style="width: 100%; margin-top: 10px; background-color: #8b0000;">Yayınla ve Paylaş</button>
+    </div>
+
+    <script src="uygulama.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initAdmin();
-        });
+        function loginAdmin() {
+            const pass = document.getElementById('adminPassword').value;
+            if (pass === "2015") {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                alert("Giriş başarılı!");
+            } else {
+                alert("Hatalı Şifre! Sadece 2015 girilmelidir.");
+            }
+        }
     </script>
 </body>
 </html>

@@ -3,228 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hamit & Power Şevko Music Platform</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            padding: 20px;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background-color: #1f1f1f;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-bottom: 3px solid #8b0000;
-        }
-
-        .nav-bar {
-            display: flex;
-            gap: 10px;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #333;
-            background-color: #2a2a2a;
-            color: #fff;
-            outline: none;
-        }
-
-        button {
-            padding: 10px 15px;
-            border-radius: 5px;
-            border: none;
-            background-color: #8b0000; /* Kan Kırmızısı */
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button:hover {
-            background-color: #b22222;
-        }
-
-        .admin-panel {
-            display: none;
-            background-color: #1f1f1f;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            border: 2px solid #8b0000;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .music-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .music-card {
-            background-color: #181818;
-            padding: 15px;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            border: 1px solid #282828;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        .music-card iframe {
-            width: 100%;
-            height: 180px;
-            border-radius: 8px;
-            border: none;
-        }
-
-        .tag {
-            background-color: #8b0000;
-            font-size: 12px;
-            padding: 3px 8px;
-            border-radius: 4px;
-            width: fit-content;
-            font-weight: bold;
-        }
-    </style>
+    <title>Hamit & Power Şevko Müzik Platformu</title>
+    <link rel="stylesheet" href="stil.css">
 </head>
 <body>
-
     <div class="header">
-        <h1>🎵 Hamit & Power Şevko Music</h1>
+        <h1>🎵 Hamit & Power Şevko Müzik</h1>
         <div class="nav-bar">
-            <input type="text" id="urlInput" placeholder="Adres girin (örn: admin)...">
+            <input type="text" id="urlInput" placeholder="Adres yazın (örn: /admin)..." onkeydown="if(event.key==='Enter') checkRoute()">
             <button onclick="checkRoute()">Git</button>
         </div>
     </div>
-
-    <!-- ADMIN PANEL -->
-    <div id="adminPanel" class="admin-panel">
-        <h2>🛠️ Power Şevko & Admin Şarkı Yayınlama Paneli</h2>
-        <p style="color:#aaa; font-size:13px; margin-bottom:15px;">YouTube linkini gir, kapak resmini otomatik al ve herkeste paylaş!</p>
-        <div class="form-group">
-            <label>Şarkı / Video Adı:</label>
-            <input type="text" id="songTitle" placeholder="Örn: Efsane Parça">
-        </div>
-        <div class="form-group">
-            <label>Sanatçı / Kanal:</label>
-            <input type="text" id="songArtist" placeholder="Örn: Power Şevko Mix">
-        </div>
-        <div class="form-group">
-            <label>YouTube Video Linki:</label>
-            <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
-        </div>
-        <button onclick="publishSong()">📥 İndir ve Paylaş (Yayınla)</button>
-    </div>
-
-    <!-- MÜZİK AKIŞI -->
-    <h2>🔥 Ortak Yayın Akışı</h2>
+    <h2>🔥 Yayınlanan Müzikler ve Videolar</h2>
     <br>
-    <div class="music-grid" id="musicContainer">
-        <!-- Şarkılar buraya dinamik eklenecek -->
-    </div>
-
+    <div class="music-grid" id="musicContainer"></div>
+    <script src="uygulama.js"></script>
     <script>
-        let songs = JSON.parse(localStorage.getItem('published_songs_power_sevko')) || [];
-
-        function renderSongs() {
-            const container = document.getElementById('musicContainer');
-            container.innerHTML = '';
-            
-            if(songs.length === 0) {
-                container.innerHTML = '<p style="color:#777;">Henüz şarkı yayınlanmamış. Admin paneline girip ilk şarkıyı sen ekle!</p>';
-                return;
+        window.onload = function() {
+            // Eğer URL'de /admin varsa direkt admin sayfasına yönlendir
+            if (window.location.pathname.endsWith('admin') || window.location.search.includes('admin')) {
+                window.location.href = 'admin.html';
             }
-
-            songs.forEach(song => {
-                const card = document.createElement('div');
-                card.className = 'music-card';
-                card.innerHTML = `
-                    <span class="tag">Power Şevko Onaylı</span>
-                    <iframe src="https://www.youtube.com/embed/${song.videoId}" allowfullscreen></iframe>
-                    <h3>${song.title}</h3>
-                    <p style="color:#aaa;">${song.artist}</p>
-                    <small style="color:#666; word-break: break-all;">Kapak: ${song.thumbnail}</small>
-                `;
-                container.appendChild(card);
-            });
+            renderPublicSongs();
         }
 
         function checkRoute() {
-            const input = document.getElementById('urlInput').value.trim();
-            if (input.toLowerCase() === 'admin') {
-                const pass = prompt("Power Şevko / Admin Şifresini Girin:");
-                if (pass === "Hamit 2015") {
-                    document.getElementById('adminPanel').style.display = 'block';
-                    alert("Admin girişi başarılı! Hoş geldin.");
-                } else {
-                    alert("Hatalı Şifre!");
-                }
+            const input = document.getElementById('urlInput').value.trim().toLowerCase();
+            if (input === '/admin' || input === 'admin') {
+                window.location.href = 'admin.html';
             } else {
-                document.getElementById('adminPanel').style.display = 'none';
-                alert("Geçersiz sayfa veya adres!");
+                alert("Geçersiz adres! Admin için '/admin' yazmalısınız.");
             }
         }
-
-        function extractYouTubeId(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        }
-
-        function publishSong() {
-            const title = document.getElementById('songTitle').value.trim();
-            const artist = document.getElementById('songArtist').value.trim();
-            const url = document.getElementById('youtubeUrl').value.trim();
-            
-            const videoId = extractYouTubeId(url);
-
-            if (!title || !artist || !videoId) {
-                alert("Lütfen tüm alanları eksiksiz doldurun ve geçerli bir YouTube linki girin!");
-                return;
-            }
-
-            const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-
-            const newSong = {
-                title: title,
-                artist: artist,
-                videoId: videoId,
-                thumbnail: thumbnailUrl
-            };
-
-            songs.unshift(newSong);
-            localStorage.setItem('published_songs_power_sevko', JSON.stringify(songs));
-            renderSongs();
-
-            document.getElementById('songTitle').value = '';
-            document.getElementById('songArtist').value = '';
-            document.getElementById('youtubeUrl').value = '';
-
-            alert("Şarkı başarıyla indirildi, kapak resmi çekildi ve herkesle paylaşıldı!");
-        }
-
-        renderSongs();
     </script>
 </body>
 </html>
