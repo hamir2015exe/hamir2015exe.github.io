@@ -31,7 +31,8 @@ function renderPublicSongs(filterText = '') {
             
             <audio controls style="width:100%; margin-top:10px;">
                 <source src="${song.url}" type="audio/mp4">
-                Tarayıcınız bu ses formatını desteklemiyor.
+                <source src="${song.url}" type="audio/mpeg">
+                Tarayıcınız bu medya formatını desteklemiyor.
             </audio>
         `;
         container.appendChild(card);
@@ -71,5 +72,5 @@ function publishLocalFile() {
     document.getElementById('mediaUrl').value = '';
     document.getElementById('coverUrl').value = '';
 
-    alert("✅ Medya başarıyla eklendi ve reklamsız oynatıcılara yüklendi!");
+    alert("✅ Medya başarıyla eklendi! Artık YouTube'a girmeden doğrudan tarayıcından çalınacak.");
 }
