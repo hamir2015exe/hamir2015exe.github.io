@@ -35,7 +35,6 @@ function renderPublicSongs(filterText = '') {
             <h3>${song.title}</h3>
             <p style="color:#aaa;">${song.artist}</p>
             
-            <!-- Gizli veya doğrudan oynatma alanı -->
             <div id="player-${index}" style="margin-top:10px;">
                 <button onclick="playMedia(${index})" style="width:100%; background:#8b0000; padding:8px; border-radius:5px; color:white; font-weight:bold; cursor:pointer;">▶ Dinle / Oynat</button>
             </div>
@@ -49,7 +48,6 @@ function playMedia(index) {
     const song = songs[index];
     const playerContainer = document.getElementById(`player-${index}`);
     
-    // Reklamsız ve doğrudan oynatıcı katmanı
     playerContainer.innerHTML = `
         <iframe width="100%" height="160" src="https://www.youtube-nocookie.com/embed/${song.videoId}?autoplay=1&rel=0&modestbranding=1" title="${song.title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:6px;"></iframe>
     `;
